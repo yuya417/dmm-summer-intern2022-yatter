@@ -16,8 +16,6 @@ type AddRequest struct {
 
 // Handle request for `POST /v1/accounts`
 func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
-	// ctx := r.Context()
-
 	var req AddRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		httperror.BadRequest(w, err)
@@ -31,12 +29,18 @@ func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_ = h.app.Dao.Account() // domain/repository の取得
-	panic("Must Implement Account Registration")
-
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(account); err != nil {
-		httperror.InternalServerError(w, err)
-		return
-	}
+	ctx := r.Context()
+    if created_user, err := h.app.Dao.Account().CreateUser(ctx, account); err != nil {
+        httperror.InternalServerError(w, err)
+        return
+    } else if created_user == nil {
+        httperror.Error(w, http.StatusUnauthorized)
+        return
+    } else {
+        w.Header().Set("Content-Type", "application/json")
+        if err := json.NewEncoder(w).Encode(created_user); err != nil {
+            httperror.InternalServerError(w, err)
+            return
+        }
+    }
 }
