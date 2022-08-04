@@ -19,8 +19,9 @@ func NewRouter(app *app.App) http.Handler {
 	r := chi.NewRouter()
 	h := &handler{app: app}
 	
-	//r.Get("/{username}", h.Show)
+	r.Get("/{id}", h.Show)
 	r.With(auth.Middleware(h.app)).Post("/", h.Create)
+
 
 	return r
 }

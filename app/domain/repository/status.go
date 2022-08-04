@@ -7,7 +7,6 @@ import (
 )
 
 type Status interface {
-	// Fetch account which has specified username
-	//FindByUsername(ctx context.Context, username string) (*object.Account, error)
+	FindByStatusID(ctx context.Context, id string) (*object.Status, error)
 	CreateStatus(ctx context.Context, account *object.Account, status *object.Status) (*object.Status, error)
 }
