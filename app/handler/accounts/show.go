@@ -9,7 +9,7 @@ import (
     "github.com/go-chi/chi"
 )
 
-// Handle request for POST /v1/accounts
+// Handle request for GET /v1/accounts/{username}
 func (h handler) Show(w http.ResponseWriter, r *http.Request) {
     username := chi.URLParam(r, "username")
     ctx := r.Context()
