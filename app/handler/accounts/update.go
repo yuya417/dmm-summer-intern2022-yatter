@@ -86,15 +86,15 @@ func (h *handler) Update(w http.ResponseWriter, r *http.Request) {
     }
 
 	ctx := r.Context()
-    if created_user, err := h.app.Dao.Account().UpdateUser(ctx, account); err != nil {
+    if updated_user, err := h.app.Dao.Account().UpdateUser(ctx, account); err != nil {
         httperror.InternalServerError(w, err)
         return
-    } else if created_user == nil {
+    } else if updated_user == nil {
         httperror.Error(w, http.StatusUnauthorized)
         return
     } else {
         w.Header().Set("Content-Type", "application/json")
-        if err := json.NewEncoder(w).Encode(created_user); err != nil {
+        if err := json.NewEncoder(w).Encode(updated_user); err != nil {
             httperror.InternalServerError(w, err)
             return
         }
