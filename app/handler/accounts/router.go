@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"yatter-backend-go/app/app"
+	"yatter-backend-go/app/handler/auth"
 
 	"github.com/go-chi/chi"
 )
@@ -20,6 +21,7 @@ func NewRouter(app *app.App) http.Handler {
 	
 	r.Get("/{username}", h.Show)
 	r.Post("/", h.Create)
+	r.With(auth.Middleware(h.app)).Post("/update_credentials", h.Update)
 
 	return r
 }
